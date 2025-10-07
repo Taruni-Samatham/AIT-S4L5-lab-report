@@ -1,0 +1,32 @@
+import networkx as nx
+
+def a_star_pathfinding(graph, start_node, goal_node, heuristic):
+    try:
+        path = nx.astar_path(graph, start_node, goal_node, heuristic=heuristic, weight='weight')
+        return path
+    except nx.NetworkXNoPath:
+        return None
+
+if __name__ == "__main__":
+    G = nx.Graph()
+    G.add_edge('S', 'A', weight=2)
+    G.add_edge('S', 'B', weight=3)
+    G.add_edge('A', 'G', weight=1)
+    G.add_edge('B', 'G', weight=2)
+
+    heuristic_values = {'S': 5, 'A': 2, 'B': 3, 'G': 0}
+
+    def example_heuristic(u, v):
+        return heuristic_values.get(u, 0)
+
+    start = 'S'
+    goal = 'G'
+    path = a_star_pathfinding(G, start, goal, example_heuristic)
+    
+    if path:
+        print(f"Path found from {start} to {goal}: {path}")
+        length = nx.astar_path_length(G, start, goal, heuristic=example_heuristic, weight='weight')
+        print(f"Path length: {length}")
+    else:
+        print(f"No path found from {start} to {goal}.")
+
